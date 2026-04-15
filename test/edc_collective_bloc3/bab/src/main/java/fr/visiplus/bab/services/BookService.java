@@ -7,7 +7,6 @@ import fr.visiplus.bab.entities.User;
 import fr.visiplus.bab.repositories.BookRepository;
 import fr.visiplus.bab.repositories.UserRepository;
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,9 +20,8 @@ public class BookService {
   private UserRepository userRepository;
 
   public BookService(
-    final BookRepository bookRepository,
-    final UserRepository userRepository
-  ) {
+      final BookRepository bookRepository,
+      final UserRepository userRepository) {
     this.bookRepository = bookRepository;
     this.userRepository = userRepository;
   }
@@ -36,22 +34,22 @@ public class BookService {
     User user = userRepository.getReferenceById(userId);
     Set<BookDTO> books = new LinkedHashSet<BookDTO>();
     user
-      .getReservations()
-      .forEach(resa -> {
-        if (!isNotGet(resa.getBook())) {
-          books.add(convert(resa.getBook()));
-        }
-      });
+        .getReservations()
+        .forEach(resa -> {
+          if (!isNotGet(resa.getBook())) {
+            books.add(convert(resa.getBook()));
+          }
+        });
     return books;
   }
 
   public List<BookDTO> getBookBookedButNotGet() {
     return bookRepository
-      .findAll()
-      .stream()
-      .filter(book -> isNotGet(book))
-      .map(book -> convert(book))
-      .collect(Collectors.toList());
+        .findAll()
+        .stream()
+        .filter(book -> isNotGet(book))
+        .map(book -> convert(book))
+        .collect(Collectors.toList());
   }
 
   private boolean isNotGet(final Book book) {
@@ -63,35 +61,31 @@ public class BookService {
     LocalDate today = LocalDate.now();
 
     long daysBetween = java.time.temporal.ChronoUnit.DAYS.between(
-      bookedDate,
-      today
-    );
+        bookedDate,
+        today);
 
     return daysBetween > 21;
   }
 
   private List<BookDTO> convert(final List<Book> books) {
     return books
-      .stream()
-      .map(book -> convert(book))
-      .collect(Collectors.toList());
+        .stream()
+        .map(book -> convert(book))
+        .collect(Collectors.toList());
   }
 
   private BookDTO convert(final Book book) {
     return new BookDTO(
-      book.getId(),
-      book.getName(),
-      book.getDescription(),
-      book.getStatus()
-    );
+        book.getId(),
+        book.getName(),
+        book.getDescription(),
+        book.getStatus());
   }
 
   public List<BookDTO> getUnavailableBooks() {
-    return bookRepository
-      .findAll()
-      .stream()
-      .filter(book -> !book.getStatus().equals(BookStatus.AVAILABLE))
-      .map(this::convert)
-      .toList();
+    return bookRepository.findAll().stream()
+        .filter(b -> !b.getStatus().equals(BookStatus.AVAILABLE))
+        .map(this::convert)
+        .toList();
   }
 }
