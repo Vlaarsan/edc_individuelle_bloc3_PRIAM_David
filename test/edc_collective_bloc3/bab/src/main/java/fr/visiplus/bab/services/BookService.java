@@ -85,4 +85,13 @@ public class BookService {
       book.getStatus()
     );
   }
+
+  public List<BookDTO> getUnavailableBooks() {
+    return bookRepository
+      .findAll()
+      .stream()
+      .filter(book -> !book.getStatus().equals(BookStatus.AVAILABLE))
+      .map(this::convert)
+      .toList();
+  }
 }
