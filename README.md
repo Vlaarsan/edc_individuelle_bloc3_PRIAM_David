@@ -1,2 +1,0 @@
-# edc_individuelle_bloc3_PRIAM_David
-edc_individuelle_bloc3
