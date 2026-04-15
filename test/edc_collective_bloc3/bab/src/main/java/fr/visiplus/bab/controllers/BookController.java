@@ -59,4 +59,9 @@ public class BookController {
   public List<BookDTO> getBooksNotRetrieved() {
     return bookService.getBooksNotRetrieved();
   }
+
+  @GetMapping("/book/unavailable")
+  public List<BookDTO> getUnavailableBooks() {
+    return bookService.getUnavailableBooks();
+  }
 }
